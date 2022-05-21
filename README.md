@@ -1,9 +1,9 @@
 <p align="center">
   <a href="" rel="noopener">
- <img width=200px height=200px src="artwork/wsm.png" alt="Project logo"></a>
+ <img width=200px height=200px src="artwork/logo.jpeg" alt="Project logo"></a>
 </p>
 
-<h3 align="center">Smart Wind Speed Monitor</h3>
+<h3 align="center">Smart Hydroponics</h3>
 
 <div align="center">
 
