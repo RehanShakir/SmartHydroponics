@@ -78,7 +78,7 @@ function Login() {
               </Form.Item>
             </div>
 
-            <Form.Item style={{ marginTop: -100, marginLeft: "100px" }}>
+            <Form.Item style={{ marginLeft: "100px" }}>
               <div style={{ textAlign: "center" }}>
                 <Button
                   loading={loading}
