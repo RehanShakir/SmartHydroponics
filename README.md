@@ -3,7 +3,7 @@
  <img width=200px height=200px src="artwork/logo.jpeg" alt="Project logo"></a>
 </p>
 
-<h3 align="center">Smart Hydroponics</h3>
+<h3 align="center">LoneTree Smart Dosing Device</h3>
 
 <div align="center">
 
@@ -13,22 +13,24 @@
 
 ---
 
-<p align="center"> Smart Wind Speed Monitor
+<p align="center"> LoneTree Smart Dosing Device
     <br> 
 </p>
 
-## 📝 Table of Contents
+# 📝 Table of Contents
 
 - [About](#about)
-- [Getting Started](#getting_started)
-- [Circuit](#circuit)
-- [WebApp](#webapp)
-- [Usage](#usage)
-- [List Of Components](#list)
-- [Built Using](#built_using)
-- [Authors](#authors)
+- [Smart Socket](#sfms)
+  - [Getting Started](#getting_started)
+  - [Circuit](#circuit)
+  - [WebApp](#webapp)
+  - [Usage](#usage)
+  - [List Of Components](#list)
+  - [Built Using](#built_using)
+  - [Authors](#authors)
 
-## 🧐 About <a name = "about"></a>
+
+# 📜 About <a name = "about"></a>
 
 This repo contains
 
@@ -36,8 +38,9 @@ This repo contains
 - Firmware
 - Detailed instructions
 
-for Smart Wind Speed Monitor.
+<br><br>
 
+#   Smart Socket<a name = "sfms"></a>
 ## Getting Started <a name = "getting_started"></a>
 
 These instructions will get you a copy of the project up and running on your system.
@@ -47,69 +50,51 @@ These instructions will get you a copy of the project up and running on your sys
 Things you need to install the FW.
 
 ```
-- Raspberry Pi Zero W
-- PiSugar
-- SIM7600-X
+- Arduino IDE
 ```
 
 ### Installing <a name = "installing"></a>
 
 A step by step series that tell you how to get the Firmware and Backend running
-### Raspberry Pi Firmware Pre-Reqs
 
-1.  Download and install the latest Raspberry Pi OS Desktop image to your SD card
-2.  Open the terminal and execute the following command
-    ```sudo raspi-config```
-3. Then follow the following pictures to enable I2C bus on you raspberry pi
+#### ESP32 Configuration(Frequency Counter)
 
-* ![R1](artwork/r1.png)
-* ![R2](artwork/r2.png)
-* ![R3](artwork/r3.png)
-* ![R4](artwork/r4.png)
-* ![R5](artwork/r5.png)
+You should have Arduino IDE Installed
 
-* Then do the same for Serial(UART) and SPI
+1.  Add ESP32 Board to your Arduino IDE
+2.  In your Arduino IDE, go to File> Preferences
+    Installing ESP32 Add-on in Arduino IDE Windows, Mac OS X, Linux open preferences
+3.  Enter `https://dl.espressif.com/dl/package_esp32_index.json`
+    into the “Additional Board Manager URLs” field then, click the “OK” button:
+    Note: if you already have the ESP32 boards URL, you can separate the URLs with a comma(each board will go to neaw line) as follows:
+    `https://dl.espressif.com/dl/package_esp32_index.json,\n http://arduino.esp8266.com/stable/package_esp8266com_index.json`
 
-* ![R2](artwork/serial.png)
-* ![R2](artwork/spi.png)
-### Configuring Raspberry Pi
+4.  Open the Boards Manager. Go to Tools > Board > Boards Manager…
+5.  Search for ESP32 and press install button for the ESP32 by Espressif Systems“:
+6.  That’s it. It should be installed after a few seconds.
+7.  In your Arduino sketchbook directory, create tools directory if it doesn't exist yet.
+8.  Unpack the tool into tools directory(present in libs/ESP32FS-1.0.zip) (the path will look like <home_dir>/Arduino/tools/ESP32FS/tool/esp32fs.jar).
+9.  Close and re-open the Arduino IDE.
 
- 1.  Copy Firmware folder to the desktop of your Raspberry Pi, open the terminal of your Raspberry Pi and execute the following commands
-  - ```sudo apt-get update```
-  - ```sudo apt-get upgrade```
-  - ```cd ~/Desktop/Firmware/```
-  - ```sudo chmod a+rx starter.sh```
-  - ```sudo apt install python3-pip```
-  - ```sudo pip3 install --upgrade setuptools```
-  - ```pip3 install paho-mqtt```
-  - ```sudo pip3 install RPi.bme280```
-  - ```pip3 install smbus-cffi==0.5.1```
+10. Now copy the contents of the libs folder to the libraries directory of your Arduino
+    1. If you are using windows, the libraries directory will be Documents/Arduino/libraries
 
-#### Running the Firmware
+##### ESP32 Node FW Uploading
 
--   Execute the following command to run the firmware
+1.  Select ESP32 Dev Module from Tools->Board->ESP32
+2.  Select the correct port from Tools->Port
+3.  Then open FSP32_FW.ino file from Firmware/FreqMonitor/ESP32_FW folder.
+4.  Select Tools > ESP32 Sketch Data Upload menu item. This should start uploading the files into ESP32 flash file system.
+5.  Now Upload the Code to your ESP32 Dev Module.
+6.  Your ESP32 is now ready to be used.
 
-``./home/pi/Firmware/starter.sh``
+##  🔌Circuit <a name = "circuit"></a>
 
-## Circuit <a name = "circuit"></a>
+### ESP32 DevKit V1 Pinout
 
-### Raspberry Pi Zero W Pinout
+Follow the pinout diagram given below to connect different components to your ESP32 DevKit V1 board.
 
-Follow the pinout diagram given below to connect different components to your Raspberry Pi Zero W.
-
-![Pinout](Circuit/pinout.png)
-
-### Pi Sugar Connection with Raspberry Pi Zero W
-
-The Pi Sugar will be placed beneath the Raspberry Pi Zero W as shown in the sketch below.
-
-![piSugar](Circuit/piSugar.gif)
-
-### Sim7600E Connection with Raspberry Pi Zero W
-
-The Pi Sugar will be placed above the Raspberry Pi Zero W as shown in the pciture below. Moreover, the antennas for GPS and GPRS can be easily connected.
-
-![sim7600](Circuit/sim7600.png)
+![Pinout](Circuit/esp32pinout.jpg)
 
 
 ### Complete Circuit Diagram
@@ -118,92 +103,184 @@ Here's the complete circuit diagram of the system.
 
 ![CircuitDiagram](Circuit/Circuit_bb.png)
 
-### Components Pin Connection Details
+
+### Other Components
 
 ```http
-Components pin connection details
+Other components pin connection details
 ```
 
-#### LED Light
+#### Smart Socket Circuit
 
-```LED Light Connected with Rapberry Pi Zero W```
+```Different Components connected to Arduino Pro Mini for Frequency Measurements```
 
-| LED Pins | Raspberry Pi Zero W |
+#### ESP32 With Arduino Nano Connections
+
+```Arduino Nano Connected with ESP32```
+
+| Arduino Nano | ESP32 |
 | :---------- | :---- |
-| `Pin 1 (longer pin)`   | `D12` |
-| `Pin 2 (shorter pin)`   | `GND` |
-
-#### Buzzer
-
-```Buzzer Connected with Rapberry Pi Zero W```
-
-| Buzzer Pins | Raspberry Pi Zero W |
-| :---------- | :---- |
-| `Pin 1 (red)`   | `D27` |
-| `Pin 2 (black)`   | `GND` |
-
-#### Anemometer
-
-```Anemometer Connected with Rapberry Pi Zero W```
-
-| Anemometer Pins | Raspberry Pi Zero W |
-| :---------- | :---- |
-| `Pin 1`   | `D5` |
-| `Pin 2`   | `GND` |
+| `D5`   | `TX2` |
+| `D6`   | `RX2` |
+| `GND`   | `GND` |
 
 
+#### Temperature and Humidity Sensor
 
-#### Temperature and Humidity Sensor (BME280)
+```DHT22 Connected with ESP32```
 
-```BME280 Connected with Rapberry Pi Zero W```
-
-| BME280 Pins | Raspberry Pi Zero W |
+| DHT22 Pins | ESP32 |
 | :--------- | :---- |
-| `VIN`      | `3.3V`  |
+| `VCC`      | `5V`  |
 | `GND`      | `GND` |
-| `SCL`     | `SCL` |
-| `SDA`     | `SDA` |
+| `Data`     | `D14` |
 
-## WebApp <a name = "webapp"></a>
+#### 8 Channle Relay Module(SSR or Mechanical)
 
-``((TO BE UPDATED IN THE UPCOMMING MILESTONES))``
+```Relay Connected with ESP32 via Logic Level Shifter```
+
+| Relay Module Pins | ESP32 |
+| :---------------- | :---- |
+| `VCC`             | `5V`  |
+| `IN1`             | `D12` |
+| `IN2`             | `D19` |
+| `IN3`             | `D18` |
+| `IN4`             | `D5`  |
+| `IN5`             | `D4`  |
+| `IN6`             | `D2`  |
+| `IN7`             | `D15` |
+| `IN8`             | `D26` |
+| `GND`             | `GND` |
+
+
+## 💻WebApp <a name = "webapp"></a>
+
+
+WebApp can be accessed from the link below
+
+**TO BE ADDED**
+
+### Data
+Data published from the device would be in the JSON format given below:
+
+```json
+{
+  "macAddress": "",
+  "Name": "",
+  "Address": "",
+  "RSSI": ""
+}
+```
+
+### MQTT Topics
+
+```MQTT Topic Details```
+*   As seen from ESP32
+
+| Topic | Type | Details
+| :---------- | :---- |  :---- |
+| `LoneTree Smart Dosing Device/device/data`   | `PUBLISH` |  `Publishes the socket state string` | 
+
+### FrontEnd
+
+-   The WebApp is developed using NodeJS, ReactJS and MongoDB.
+
+**TO BE ADDED**
+
+
+<!-- -   Link: [Complete Dashboard]()
+    *   user: admin@LoneTree Smart Dosing Device.com
+    *   pass: admin -->
+
+<!-- ![dashboard21](artwork/db4.png) Dashboard Home Page
+
+![dashboard23](artwork/db3.png) Settings Page
+
+![dashboard18](artwork/db7.png) Map Page Additional Information Marker
+
+![dashboard24](artwork/db5.png) Sign-in Page
+
+![dashboard25](artwork/db6.png) Sign-up Page -->
+
+### Database
+
+You can access the database from the link below
+
+**TO BE ADDED**
+<!-- 
+*   http://LoneTree Smart Dosing Device-data-preview.production.rehanshakir.com/
+    *   User: admin
+    *   Password: admin
+
+![dashboard115](artwork/db.png) Database -->
 
 ## Usage <a name = "usage"></a>
 
-``((TO BE UPDATED IN THE UPCOMMING MILESTONES))``
+1.  [Upload the code to your Arduino Pro Mini](https://github.com/Nauman3S/LoneTree Smart Dosing Device#arduino-pro-mini-configuration)
+2.  [Upload the code to your ESP32](https://github.com/Nauman3S/LoneTree Smart Dosing Device#esp32-configurationfrequency-counter)
+3.  [Make the circuit](https://github.com/Nauman3S/LoneTree Smart Dosing Device#complete-circuit-diagram)
+4.  Power on your ESP32, it will present you with an AP named `SmartEFM-abcd` (while `SmartEFM` can be changed in the portal and `abcd` is a unique id for each esp32) 
+5.  Default captive portal password `123456789AP` which can be changed in captive portal. 
+6.  Connect to the ESP32 access point and open the web-browser and navigate to the link `http://esp32.local/_ac`. This link will work on most of the operating systems but if your operating system is not allowing to open it, you may want to check the captive portal IP Address from the serial monitor and can use that IP address inplace of the above mentioned URL. 
+7.  The default access IP Address is `http://192.168.4.1/_ac` 
+8.  You will be presented with a main dashboard as shown below(based on your device)
+![SCR1](artwork/scr1.png)
+    * You can also open `http://esp32.local/` to access the CaptivePortal.
+![SCR1](artwork/scr2.png)
+9. You can connect to WiFi, from "Connect to WiFi" menu
+![SCR1](artwork/scr4.png)
+10. Once connected to a WiFi network, you can again access the captive portal using same URL or the IP Address from the Serial monitor.
+11. You can open settings page with following default credentials
+   1.  User: **AP Name (SmartEFM)**
+   2.  Password: **admin**
 
-## List of Components <a name = "list"></a>
+In settings page, you can configure your device. You can set network type (WiFi/GPRS) and you can set network APN details as well.
+![SCR1](artwork/scr3.png)
+
+13. Open the [test dashboard](https://nodered-proxy.production.wrapdrive.tech/ui/#!/2) to see the live data
+
+<br><br>
+
+### PCB
+
+**TO BE ADDED**
+<!-- ![PCBEFM](PCB/SmartEFM/pcb2d.png)
+![PCBEFM3d](PCB/SmartEFM/pcb3d.png) -->
+
+
+### Casing
+
+![CAEFM](Casing/SmartEFM_BS_Box.png)
+![CAEFMTOP](Casing/smartEFM_TC.png)
+
+
+<br><br>
+# List of Components <a name = "list"></a>
 
 Following components are used to make this project
 
-1.  Raspberry Pi Zero W
-    ○ https://www.amazon.co.uk/CanaKit-Raspberry-Wireless-Complete-Starter/dp/B072N3X39J/ref=sr_1_1?keywords=raspberry+pi+zero+w+w&qid=1639821510&sr=8-1
-2.  RPi Zero W UPS
-    ○ https://www.amazon.co.uk/Pisugar2-Portable-Lithium-Raspberry-Accessories/dp/B08D678XPR/ref=sr_1_4?keywords=raspberry+pi+ups&qid=1639821580&sr=8-4
-3.  4G GPRS and GPS SIM7600E-H
-    ○ https://www.amazon.co.uk/IBest-GSM-GPRS-GNSS-Board/dp/B07PPSTY13/ref=sr_1_3?keywords=raspberry%2Bpi%2B4g&qid=1639821783&sr=8-3&th=1
-4.  BME280 Temperature, Humidity and Pressure Sensor
-    ○ https://www.amazon.co.uk/CUQI-Barometric-Pressure-Temperature-Humidity/dp/B0991RKZSN/ref=sr_1_1?keywords=bme280&qid=1639822215&sr=8-1
-5.  Wind Speed Meter
-    ○ https://www.amazon.co.uk/Nephit-Measurement-Meteorological-Instruments-Accessories/dp/B09F64GXQH/ref=sr_1_7?keywords=wind+speed+sensor&qid=1639822540&sr=8-7
-6.  RJ11 Screw Terminal
-    ○ https://www.amazon.co.uk/JENOR-Terminal-Adapter-Connector-Splitter/dp/B087R3187F/ref=sr_1_2?keywords=rj11+terminal&qid=1639823304&sr=8-2
-7.  RJ11 Connector
-    ○ https://www.amazon.co.uk/Rhinocables%C2%AE-Coupler-Extender-Extension-connector/dp/B00EVS92KQ/ref=sr_1_3?keywords=rj11+connector&qid=1639823380&sr=8-3
-8.  Alarm Buzzer
-    ○ https://www.amazon.co.uk/sourcingmap%C2%AE-Continuons-Electronic-Buzzer-Sounder/dp/B010V4UZTK/ref=sr_1_9?keywords=alarm+buzzer&qid=1639823529&sr=8-9
-9.  3v-6v LED
-    ○ https://www.amazon.co.uk/Sourcingmap-20pcs-Wired-Light-Flashing/dp/B07DYZ1L3Y/ref=sr_1_12?keywords=led+light+5mm&qid=1639823838&sr=8-12
+1.   Microcontrollers
+     *   ESP32 with SIM800L
+    https://de.aliexpress.com/item/4001142716386.html?gatewayAdapt=glo2deu
 
-## 📽️Demo Videos <a name="demovideo"></a>
+2.  Power Circuit
+    *   AC to 5V DC Converter
+    https://www.amazon.com/Converter-Universal-Isolated-Switching-Version/dp/B07SGQ6XXR/ref=sr_1_1?crid=12JGAW640YK25&keywords=ac+to+dc+module&qid=1642413883&sprefix=ac+to+dc+modu%2Caps%2C303&sr=8-1
+3.  Misc
+    *   5mm LED Light
+    https://www.amazon.com/MCIGICM-Circuit-Assorted-Science-Experiment/dp/B07PG84V17/ref=sr_1_2?crid=2EJHAQUUNKS16&keywords=led+5mm&qid=1642414000&sprefix=led+5%2Caps%2C336&sr=8-2
 
--   [Firmware Demo Video](https://youtu.be/ptCAPFGeyw8) - Smart Wind Speed Monitor Firmware Demo Video
-## ⛏️ Built Using <a name = "built_using"></a>
+    *   Bi-directional logic level shifter
+    https://www.amazon.com/DZS-Elec-Converter-Bi-Directional-Communication/dp/B07J67MTKV/ref=sr_1_10?keywords=logic+level+converter+bi-directional&qid=1642477438&sprefix=bi-directional+level%2Caps%2C417&sr=8-10
+    
+    *   Solid State Relay
+    https://www.amazon.com/DollaTek-1-Channel-Level-Trigger-Module/dp/B07DK29FR6/ref=sr_1_12?crid=3AY7SEMFWEWVT&keywords=ssr+relay+module&qid=1651029377&sprefix=ss+relay+module%2Caps%2C174&sr=8-12
+# ⛏️ Built Using <a name = "built_using"></a>
 
 
-- [Python](https://www.python.org/) - Programming Language - For Raspberry Pi Zero W Firmware
-- [Fritzing](https://fritzing.org/) - Circuit Designer
+- [Arduino](https://www.arduino.cc/) - Embedded Framework and IDE - For Sensor Node Design
 
-## ✍️ Authors <a name = "authors"></a>
+
+# ✍️ Authors <a name = "authors"></a>
 
 - [@Nauman3S](https://github.com/Nauman3S) - Development and Deployment
