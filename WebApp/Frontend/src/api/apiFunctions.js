@@ -11,9 +11,19 @@ const headerToken = {
 
 export const loginAdmin = (data) => baseURL.post("/auth/login", data);
 
-export const loadProfile = () => baseURL.get("/auth/my-profile", headerToken);
+export const loadProfile = () =>
+  baseURL.get("/auth/my-profile", {
+    headers: {
+      "x-access-token": getToken(),
+    },
+  });
 
-export const usersList = () => baseURL.get("/admin/all-users", headerToken);
+export const usersList = () =>
+  baseURL.get("/admin/all-users", {
+    headers: {
+      "x-access-token": getToken(),
+    },
+  });
 
 export const dashboardCounts = () =>
   baseURL.get("/admin/count", {
