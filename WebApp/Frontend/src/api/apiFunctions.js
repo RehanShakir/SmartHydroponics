@@ -15,6 +15,11 @@ export const loadProfile = () => baseURL.get("/auth/my-profile", headerToken);
 
 export const usersList = () => baseURL.get("/admin/all-users", headerToken);
 
-export const dashboardCounts = () => baseURL.get("/admin/count", headerToken);
+export const dashboardCounts = () =>
+  baseURL.get("/admin/count", {
+    headers: {
+      "x-access-token": getToken(),
+    },
+  });
 
 export const signUp = (data) => baseURL.post("/auth/signup", data);
