@@ -3,7 +3,9 @@ import { dashboardCounts } from "../api/apiFunctions";
 import { useQuery } from "react-query";
 
 const Userdata = () => {
-  const { data, isLoading } = useQuery("DashboardCount", dashboardCounts);
+  const { data, isLoading } = useQuery("DashboardCount", () =>
+    dashboardCounts()
+  );
   console.log(data);
   const data1 = [
     {
