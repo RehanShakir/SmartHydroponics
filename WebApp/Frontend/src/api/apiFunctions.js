@@ -1,13 +1,5 @@
-import axios from "axios";
 import { baseURL } from "./index";
 import { getToken } from "../redux/localstorage/index";
-
-const token = getToken();
-const headerToken = {
-  headers: {
-    "x-access-token": token,
-  },
-};
 
 export const loginAdmin = (data) => baseURL.post("/auth/login", data);
 

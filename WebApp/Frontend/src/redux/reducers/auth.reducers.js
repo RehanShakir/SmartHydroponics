@@ -4,7 +4,6 @@ import {
   LOAD_PROF,
   SIGN_OUT,
   UPDATE_PROF,
-  REFRESH,
 } from "../constants";
 
 const INITIAL_STATE = {

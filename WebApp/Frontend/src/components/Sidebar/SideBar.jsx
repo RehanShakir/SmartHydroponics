@@ -60,23 +60,6 @@ const SideBar = ({ children }) => {
   const dispatch = useDispatch();
   const authState = useSelector((state) => state.auth);
 
-  // const inputAnimation = {
-  //   hidden: {
-  //     width: 0,
-  //     padding: 0,
-  //     transition: {
-  //       duration: 0.2,
-  //     },
-  //   },
-  //   show: {
-  //     width: "140px",
-  //     padding: "5px 15px",
-  //     transition: {
-  //       duration: 0.2,
-  //     },
-  //   },
-  // };
-
   const showAnimation = {
     hidden: {
       width: 0,
@@ -143,7 +126,14 @@ const SideBar = ({ children }) => {
                 );
               }
               return (
-                <NavLink to={route.path} key={index} className='link'>
+                <NavLink
+                  to={route.path}
+                  key={index}
+                  className='link'
+                  onClick={(e) => {
+                    route.name === "Logout" && dispatch(logoutAdmin());
+                    // setSubMeunIsOpen(false);
+                  }}>
                   <div className='icon'>
                     <img
                       src={

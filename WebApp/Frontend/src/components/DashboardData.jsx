@@ -1,9 +1,7 @@
 import React from "react";
 import { useQuery } from "react-query";
-import { usersList, getAllUsersMqttData } from "../api/apiFunctions";
-import { Link } from "react-router-dom";
+import { getAllUsersMqttData } from "../api/apiFunctions";
 export default function DashboardData() {
-  const { data, isLoading } = useQuery("UsersList", usersList);
   const { data: mqttData, isLoading: mqttLoading } = useQuery(
     "getAllUsersMqttData",
     getAllUsersMqttData

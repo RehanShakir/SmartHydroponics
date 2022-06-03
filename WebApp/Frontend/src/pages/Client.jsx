@@ -2,7 +2,6 @@ import { Skeleton, Modal, Input, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
-  usersList,
   getDataByMacAddress,
   addMacAddress,
   getAllMacAdresses,

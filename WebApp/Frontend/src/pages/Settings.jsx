@@ -1,12 +1,7 @@
 import { useState, useEffect } from "react";
 
 import { Skeleton, Button, Popconfirm, Empty } from "antd";
-import {
-  getAllMacAdresses,
-  removeMacaddress,
-  getAllUsersMacaddress,
-} from "../api/apiFunctions";
-import { useSelector } from "react-redux";
+import { getAllMacAdresses, removeMacaddress } from "../api/apiFunctions";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import Swal from "sweetalert2";
 
