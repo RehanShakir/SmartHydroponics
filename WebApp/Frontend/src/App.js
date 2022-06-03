@@ -4,6 +4,7 @@ import Login from "./Login";
 import Signup from "./SignUp";
 import Dashboard from "./pages/Dashboard";
 import AllUsers from "./pages/AllUsersData";
+import Settings from "./pages/Settings";
 import { Navigate, Routes, Route } from "react-router-dom";
 import { getToken } from "./redux/localstorage/index";
 import SideBar from "./components/Sidebar/SideBar";
@@ -22,7 +23,6 @@ function RequireAuth({ children, redirectTo }) {
 function App() {
   return (
     <div className='App'>
-      {/* <Routes /> */}
       <Routes>
         <Route
           path='/'
@@ -56,6 +56,16 @@ function App() {
             <RequireAuth redirectTo={"/"}>
               <SideBar>
                 <AllUsers />
+              </SideBar>
+            </RequireAuth>
+          }
+        />
+        <Route
+          path='/settings'
+          element={
+            <RequireAuth redirectTo={"/"}>
+              <SideBar>
+                <Settings />
               </SideBar>
             </RequireAuth>
           }

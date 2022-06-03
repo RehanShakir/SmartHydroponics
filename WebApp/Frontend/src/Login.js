@@ -11,17 +11,9 @@ import { useNavigate } from "react-router";
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isSignedIn } = useSelector((state) => state.auth);
-  console.log(isSignedIn);
-  // useEffect(() => {
-  //   if (isSignedIn) {
-  //     window.location.pathname = "/dashboard";
-  //   }
-  // }, [isSignedIn]);
+
   const handleLogin = async (values) => {
-    console.log(values);
     const res = await dispatch(loginAction(values));
-    console.log(res);
     if (!res) {
       navigate("/dashboard");
     }
@@ -30,11 +22,6 @@ function Login() {
     <>
       <div style={{ display: "flex" }} className='login_page'>
         <div className='flex1'>
-          {/* <img className='login_img1' src='/images/logopen.svg' alt=''></img>
-          <p style={{ marginBottom: "" }} className='login_text'>
-            Welcome! Let’s get started where you left.
-          </p> */}
-
           <img className='login_img1' src='/images/logo.jpeg' alt=''></img>
         </div>
         <div className='flex2'>
@@ -88,10 +75,7 @@ function Login() {
 
             <Form.Item style={{ marginLeft: "100px" }}>
               <div style={{ textAlign: "center" }}>
-                <Button
-                  // loading={loading}
-                  className='login_btn'
-                  htmlType='submit'>
+                <Button className='login_btn' htmlType='submit'>
                   Login
                 </Button>
                 <p>

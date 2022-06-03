@@ -33,3 +33,57 @@ export const dashboardCounts = () =>
   });
 
 export const signUp = (data) => baseURL.post("/auth/signup", data);
+
+export const addMacAddress = (macAddress) =>
+  baseURL.post(
+    "/macAddress/add",
+    { macAddress },
+    {
+      headers: {
+        "x-access-token": getToken(),
+      },
+    }
+  );
+
+export const getAllMacAdresses = () =>
+  baseURL.get("/macAddress/getAll", {
+    headers: {
+      "x-access-token": getToken(),
+    },
+  });
+
+export const getDataByMacAddress = (macAddress) =>
+  baseURL.post(
+    "/mqtt/getData",
+    { macAddress },
+    {
+      headers: {
+        "x-access-token": getToken(),
+      },
+    }
+  );
+
+export const removeMacaddress = (macAddress) =>
+  baseURL.patch(
+    "/macAddress/remove",
+    { macAddress },
+    {
+      headers: {
+        "x-access-token": getToken(),
+      },
+    }
+  );
+
+export const getAllUsersMacaddress = () =>
+  baseURL.get("/admin/all-macAddress", {
+    headers: {
+      "x-access-token": getToken(),
+    },
+  });
+
+export const getAllUsersMqttData = () =>
+  baseURL.get("/admin/all-mqttData", {
+    headers: {
+      "x-access-token": getToken(),
+    },
+  });

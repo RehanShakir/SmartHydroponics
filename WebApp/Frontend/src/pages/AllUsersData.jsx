@@ -1,59 +1,27 @@
 import { Skeleton } from "antd";
 import React, { useEffect, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { usersList } from "../api/apiFunctions";
+import { useQuery } from "react-query";
+import { getAllUsersMacaddress } from "../api/apiFunctions";
 
 const AllUsersData = () => {
   /* Component States */
   const [userData, setUserData] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [selectedUser, setSelectedUser] = useState({});
   const [filteredData, setFilteredData] = useState([]);
-  const [visible, setVisible] = useState({
-    status: false,
-    message: "",
-    type: "",
-  });
 
   /* Component Data Fetching */
-  const { data, isLoading } = useQuery("UsersList", usersList);
-
-  console.log(data);
-  const queryClient = useQueryClient();
-  /* Mutations */
-  // const mutation = useMutation(
-  //   (data) => updatePatient(data, selectedPatient._id),
-  //   {
-  //     onSuccess: (data) => {
-  //       queryClient.invalidateQueries("UsersList");
-  //       Swal.fire({
-  //         icon: "success",
-  //         timer: 1000,
-  //         showConfirmButton: false,
-  //         text: `${data.data.message || "Updated Record"}`,
-  //       });
-  //       setSelectedPatient({});
-  //       setShowEditModal(false);
-  //       return;
-  //     },
-  //     onError: (error) => {
-  //       Swal.fire({
-  //         icon: "error",
-  //         text: `${error?.response?.data?.message || "Server Error"}`,
-  //       });
-  //     },
-  //   }
-  // );
+  const { data, isLoading } = useQuery(
+    "getAllUsersMacaddress",
+    getAllUsersMacaddress
+  );
 
   /* Use Effect Hooks */
   useEffect(() => {
     window.scrollTo({ top: 0 });
   }, []);
   useEffect(() => {
-    setUserData(data?.data?.users);
-    setFilteredData(data?.data?.users);
-  }, [isLoading, data?.data?.users]);
+    setUserData(data?.data?.Macaddressess);
+    setFilteredData(data?.data?.Macaddressess);
+  }, [isLoading, data?.data?.Macaddressess]);
 
   /* On change function for fields */
 
@@ -64,33 +32,17 @@ const AllUsersData = () => {
       )
     );
   const userDataArea = (data, index) => {
+    if (data.userId.role === "admin") return;
     return (
       <tr key={index}>
-        <td className='table_text'>{`${data.fullName}`}</td>
-        <td className='table_text'>{`${data.email}`}</td>
+        <td className='table_text'>{`${data.userId.fullName}`}</td>
+        <td className='table_text'>{`${data.userId.email}`}</td>
+        <td className='table_text'>{`${data.macAddress}`}</td>
       </tr>
     );
   };
   return (
     <>
-      {/* {mutation.isSuccess && visible.status && (
-        <Alert
-          message={`${visible.message}`}
-          type={`${visible.type}`}
-          showIcon
-          closable
-          onClose={(e) => setVisible(false)}
-        />
-      )}
-      {mutation.isError && visible.status && (
-        <Alert
-          message={`${visible.message}`}
-          type={`${visible.type}`}
-          showIcon
-          closable
-          onClose={(e) => setVisible(false)}
-        />
-      )} */}
       <div>
         <div className='d-flex justify-content-between'>
           <p
@@ -98,11 +50,6 @@ const AllUsersData = () => {
       pt-2'>
             All Users
           </p>
-          {/* <Link className='' to='/add-new-patient'>
-            <button className='creat_btn mt-5 mb-3 mr-4'>
-              Add New Patient
-            </button>
-          </Link> */}
         </div>
         <div className='patient_labels d-flex justify-content-between pr-5'>
           <div className='patient_data'>
@@ -133,6 +80,9 @@ const AllUsersData = () => {
                   </th>
                   <th className='heading_table' scope='col'>
                     Email
+                  </th>
+                  <th className='heading_table' scope='col'>
+                    MacAddressess
                   </th>
                 </tr>
               </thead>

@@ -1,56 +1,206 @@
-import { DownOutlined } from "@ant-design/icons";
-import { Dropdown, Menu } from "antd";
-// import { useEffect } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { Navigate } from "react-router-dom";
-import DashboardData from "../components/Patient-appointment/DashboardData";
-import Userdata from "../components/Userdata";
-// import { loadProfile } from "../redux/actions/auth.actions";
-const Client = () => {
-  //   const { isSignedIn } = useSelector((state) => state.auth);
-  //   const dispatch = useDispatch();
-  // useEffect(() => {
-  //   if (!loading) {
-  //     dispatch(loadProfile());
-  //   }
-  // }, [loading, dispatch]);
+import { Skeleton, Modal, Input, Select } from "antd";
+import React, { useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import {
+  usersList,
+  getDataByMacAddress,
+  addMacAddress,
+  getAllMacAdresses,
+} from "../api/apiFunctions";
+import Swal from "sweetalert2";
 
-  // const menu = (
-  //   <Menu>
-  //     <Menu.Item key='0'>
-  //       <a href='https://www.antgroup.com'>1st week</a>
-  //     </Menu.Item>
-  //     <Menu.Item key='1'>
-  //       <a href='https://www.aliyun.com'>2nd week</a>
-  //     </Menu.Item>
-  //     <Menu.Divider />
-  //     <Menu.Item key='3'>3rd week</Menu.Item>
-  //   </Menu>
-  // );
+const { Option } = Select;
+const Client = () => {
+  /* Component States */
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [filteredData, setFilteredData] = useState([]);
+  const [macaddress, setMacaddress] = useState("");
+  const [okBtnLoading, seOkBtnLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [mqttData, setMqttData] = useState([]);
+
+  /* Component Data Fetching */
+  const { data: macAddressess } = useQuery("MacAddressess", getAllMacAdresses);
+
+  const queryClient = useQueryClient();
+
+  /* Mutations */
+  const getMacMutation = useMutation(getAllMacAdresses, {
+    onSuccess: (data) => {
+      queryClient.invalidateQueries("MacAddressess");
+    },
+  });
+
+  /* Use Effect Hooks */
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
+
+  const userDataArea = (data, index) => {
+    return (
+      <tr key={index}>
+        <td className='table_text'>{`${data.tds}`}</td>
+        <td className='table_text'>{`${data.ph}`}</td>
+        <td className='table_text'>{`${data.orp}`}</td>
+        <td className='table_text'>{`${data.liquidTemperature}`}</td>
+        <td className='table_text'>{`${data.temperature}`}</td>
+        <td className='table_text'>{`${data.humidity}`}</td>
+      </tr>
+    );
+  };
+
+  //Modal functions
+  const handleOk = async () => {
+    seOkBtnLoading(true);
+    const res = await addMacAddress(macaddress);
+    if (res.status === 200) {
+      getMacMutation.mutate();
+      seOkBtnLoading(false);
+
+      setIsModalVisible(false);
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Macaddress Added",
+        titleText: res?.data?.message,
+        showConfirmButton: false,
+        timer: 2000,
+      });
+    } else {
+      setIsModalVisible(false);
+      seOkBtnLoading(false);
+
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Something went Wrong! Please check your internet connection",
+        // titleText: res?.data?.message,
+        showConfirmButton: false,
+        timer: 2000,
+      });
+    }
+  };
+  const handleMacaddressChange = async (value) => {
+    setLoading(true);
+    const res = await getDataByMacAddress(value);
+    if (res.status === 200) {
+      setLoading(false);
+
+      setMqttData(res.data.data);
+      setFilteredData(res.data.data);
+    }
+  };
+
+  const renderOptions = macAddressess?.data?.Macaddressess?.macAddress?.map(
+    (macAddress) => {
+      return <Option value={macAddress}>{macAddress}</Option>;
+    }
+  );
   return (
-    <div className=''>
-      {/* <DashboardHeader /> */}
-      <div className='dashboard-contents'>
-        <div
-          className='dash_title
+    <>
+      <div>
+        <div className='d-flex justify-content-between'>
+          <p
+            className='dash_title
       pt-2'>
-          Dashboard
+            All Users
+          </p>
+          {/* <Link className='' to='/add-new-patient'> */}
+          <button
+            className='creat_btn mt-5 mb-3 mr-4'
+            onClick={() => setIsModalVisible(true)}>
+            Add New MacAddress
+          </button>
+          {/* </Link> */}
         </div>
-        <div>
-          {/* <Dropdown className='pr-5' overlay={menu} trigger={["click"]}>
-            <div
-              className='ant-dropdown-link'
-              onClick={(e) => e.preventDefault()}>
-              Weekly <DownOutlined />
+        <div className='patient_labels d-flex justify-content-between pr-5'>
+          <div className='patient_data'>
+            Sensors /
+            <span style={{ color: "#4A47A3", paddingLeft: "8px" }}>Data</span>
+          </div>
+        </div>
+        <div className=' mt-3'>
+          <div className='serch'>
+            <div style={{ display: "flex" }}>
+              <Select
+                className='col-10'
+                defaultValue='Select Macaddress'
+                onClick={() => {
+                  getMacMutation.mutate();
+                }}
+                onChange={handleMacaddressChange}>
+                {renderOptions}
+              </Select>
             </div>
-          </Dropdown> */}
+          </div>
+        </div>
+        <div className='col-lg-12 col-md-8 padding_table mt-2 pl-0'>
+          <div className='table-responsive pl-0 pr-0'>
+            <table className='table  background_table'>
+              <thead className='thead-dark'>
+                <tr>
+                  <th
+                    className='heading_table'
+                    scope='col'
+                    style={{ textAlign: "center" }}>
+                    TDS Sensor
+                  </th>
+                  <th
+                    className='heading_table'
+                    scope='col'
+                    style={{ textAlign: "center" }}>
+                    pH Sensor
+                  </th>
+                  <th
+                    className='heading_table'
+                    scope='col'
+                    style={{ textAlign: "center" }}>
+                    ORP Sensor
+                  </th>
+                  <th
+                    className='heading_table'
+                    scope='col'
+                    style={{ textAlign: "center" }}>
+                    Liquid Temperature Sensor
+                  </th>
+                  <th
+                    className='heading_table'
+                    scope='col'
+                    style={{ textAlign: "center" }}>
+                    Environment Temperature Sensor
+                  </th>
+                  <th
+                    className='heading_table'
+                    scope='col'
+                    style={{ textAlign: "center" }}>
+                    Environment Humidity Sensor
+                  </th>
+                </tr>
+              </thead>
+              {mqttData && Object.keys(mqttData).length > 0 && (
+                <tbody>{mqttData.map(userDataArea)}</tbody>
+              )}
+            </table>
+            {loading && <Skeleton paragraph={{ rows: 5 }} active />}
+          </div>
         </div>
       </div>
-
-      <Userdata />
-      <DashboardData />
-      {/* { <Navigate to={"/"} />} */}
-    </div>
+      <Modal
+        title='New MacAddress'
+        visible={isModalVisible}
+        onOk={handleOk}
+        okText={"Add"}
+        okButtonProps={{ loading: okBtnLoading }}
+        bodyStyle={{ borderRadius: 50 }}
+        onCancel={() => setIsModalVisible(false)}>
+        <Input
+          placeholder='Enter Macaddress'
+          onChange={(e) => {
+            setMacaddress(e.target.value);
+          }}
+        />
+      </Modal>
+    </>
   );
 };
 

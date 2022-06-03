@@ -5,7 +5,6 @@ const fileupload = require("express-fileupload");
 const bodyParser = require("body-parser");
 const apiRouter = require("./routes/routes");
 const path = require("path");
-
 // === Improved Security ===
 const xss = require("xss-clean");
 const mongoSanitize = require("express-mongo-sanitize");
@@ -15,6 +14,9 @@ const app = express();
 // === DB Connection ===
 
 const database = require("./config/database");
+
+// === MQTT Connection ===
+const mqtt = require("./config/mqtt");
 
 // ==== Parse Application ====
 app.use(express.json());
@@ -30,18 +32,6 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(morgan("dev"));
 
-// === import Routes here ===
-
-// Running API Routes
-app.use("/api", apiRouter);
-
-//Frontend Build Route
-app.use("/", express.static(path.join(__dirname, "../Frontend/build")));
-
-app.get("/*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../Frontend/build/index.html"));
-});
-
 // === Enabling file uplod
 app.use(fileupload());
 
@@ -56,6 +46,19 @@ app.use(express.urlencoded({ extended: true }));
 // === Connecting the DB ===
 database.connect();
 
-// === Initiate Routes Here ===
+// === Connecting the MQTT ===
+// mqtt.connect();
+
+// === import Routes here ===
+
+// Running API Routes
+app.use("/api", apiRouter);
+
+//Frontend Build Route
+app.use("/", express.static(path.join(__dirname, "../Frontend/build")));
+
+app.get("/*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../Frontend/build/index.html"));
+});
 
 module.exports = app;

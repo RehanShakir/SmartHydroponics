@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 import Client from "./Client";
+import Admin from "./Admin";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProfile } from "../redux/actions/auth.actions";
 import { getToken } from "../redux/localstorage/index";
@@ -20,8 +21,7 @@ const Dashboard = () => {
   useEffect(() => {
     profile();
   }, [profile]);
-  console.log(authState);
 
-  return <Client />;
+  return authState.role === "admin" ? <Admin /> : <Client />;
 };
 export default Dashboard;

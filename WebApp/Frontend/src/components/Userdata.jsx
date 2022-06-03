@@ -6,30 +6,29 @@ const Userdata = () => {
   const { data, isLoading } = useQuery("DashboardCount", () =>
     dashboardCounts()
   );
-  console.log(data);
   const data1 = [
     {
       image: "/images/g-1.svg",
-      text: `${data?.data?.users}`,
+      text: data?.data?.users,
       description: `All Users`,
       imagee: "/images/contactimg.svg",
     },
     {
       image: "/images/g-1.svg",
-      text: "0",
+      text: data?.data?.macAddressess,
+      description: `Total MacAdress`,
+      imagee: "/images/contactimg.svg",
+    },
+    {
+      image: "/images/g-1.svg",
+      text: data?.data?.mqtt,
       description: `Total Data`,
       imagee: "/images/contactimg.svg",
     },
     {
       image: "/images/g-1.svg",
-      text: "0",
+      text: data?.data?.admins,
       description: `Admins`,
-      imagee: "/images/contactimg.svg",
-    },
-    {
-      image: "/images/g-1.svg",
-      text: "0",
-      description: `Users`,
       imagee: "/images/contactimg.svg",
     },
   ];
@@ -40,7 +39,6 @@ const Userdata = () => {
           <div
             key={index}
             className=' flex border border-gray-400 rounded-lg mb-2 pt-2 px-2   pb-2 mx-2 '>
-            {/* <Skeleton active avatar loading={loading}> */}
             <div style={{ display: "flex" }}>
               <div>
                 <img className='mx-1' alt='' src={el.imagee}></img>
@@ -57,7 +55,6 @@ const Userdata = () => {
             <div>
               <img alt='' src={el.image}></img>
             </div>
-            {/* </Skeleton> */}
           </div>
         );
       })}

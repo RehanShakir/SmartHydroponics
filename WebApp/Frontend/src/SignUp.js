@@ -17,9 +17,7 @@ function Signup() {
     }
   }, [loading, isAuthenticated]);
   const handleSignup = async (values) => {
-    console.log(values);
     const res = await signUp(values);
-    console.log(res);
     if (res.status === 200) {
       notification["success"]({
         message: `${res.data.message}`,
@@ -37,11 +35,6 @@ function Signup() {
         style={{ display: `${loading ? "none" : "flex"}` }}
         className='login_page'>
         <div className='flex1'>
-          {/* <img className='login_img1' src='/images/logopen.svg' alt=''></img>
-          <p style={{ marginBottom: "" }} className='login_text'>
-            Welcome! Let’s get started where you left.
-          </p> */}
-
           <img src='/images/logo.jpeg' alt=''></img>
         </div>
         <div className='flex2'>
@@ -62,7 +55,6 @@ function Signup() {
               <Form.Item
                 className='email_input'
                 name='fullName'
-                // label="Email"
                 rules={[
                   {
                     required: true,

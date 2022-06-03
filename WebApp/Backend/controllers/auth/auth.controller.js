@@ -1,5 +1,6 @@
 const express = require("express");
 const User = require("../../models/user.model");
+const MacAdress = require("../../models/macAddress.model");
 const validator = require("../../validators/auth.validator");
 const { Request, Response } = express;
 const { UserExists, ValidateEmail } = validator;
@@ -67,7 +68,11 @@ exports.userSignup = async (req, res) => {
       email,
       password,
     });
+
     user.save();
+    await MacAdress.create({
+      userId: user._id,
+    });
     return res.status(200).json({ message: "User Signed Up Successfully" });
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -87,7 +92,11 @@ exports.myProfile = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
-
+/**
+ * Update User Profile
+ * @param {Request} req - request object
+ * @param {Response} res - response object
+ */
 exports.updateProfile = async (req, res) => {
   try {
     let { fullName, email, oldPassword, newPassword } = req?.body;
