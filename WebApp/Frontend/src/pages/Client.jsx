@@ -189,7 +189,8 @@ const Client = () => {
         visible={isModalVisible}
         onOk={handleOk}
         okText={"Add"}
-        okButtonProps={{ loading: okBtnLoading }}
+        okButtonProps={{ loading: okBtnLoading, style: { color: "#1890ff" } }}
+        okType={"primary"}
         bodyStyle={{ borderRadius: 50 }}
         onCancel={() => setIsModalVisible(false)}>
         <Input
