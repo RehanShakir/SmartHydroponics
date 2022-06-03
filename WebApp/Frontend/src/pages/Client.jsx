@@ -4,16 +4,30 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
   getDataByMacAddress,
   addMacAddress,
+  publishToMqtt,
   getAllMacAdresses,
 } from "../api/apiFunctions";
 import Swal from "sweetalert2";
 
 const { Option } = Select;
+
+const pumpBtns = [
+  { name: "Pump 1", value: 1, state: 0 },
+  { name: "Pump 2", value: 2, state: 0 },
+  { name: "Pump 3", value: 3, state: 0 },
+  { name: "Pump 4", value: 4, state: 0 },
+  { name: "Pump 5", value: 5, state: 0 },
+  { name: "Pump 6", value: 6, state: 0 },
+  { name: "Pump 7", value: 7, state: 0 },
+  { name: "Pump 8", value: 8, state: 0 },
+];
+
 const Client = () => {
   /* Component States */
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
   const [macaddress, setMacaddress] = useState("");
+  const [selectedMacaddress, setSelectedMacaddress] = useState("");
   const [okBtnLoading, seOkBtnLoading] = useState(false);
   const [loading, setLoading] = useState(true);
   const [mqttData, setMqttData] = useState([]);
@@ -80,7 +94,9 @@ const Client = () => {
     }
   };
   const handleMacaddressChange = async (value) => {
+    setSelectedMacaddress(value);
     setLoading(true);
+
     const res = await getDataByMacAddress(value);
     if (res.status === 200) {
       setLoading(false);
@@ -95,6 +111,37 @@ const Client = () => {
       return <Option value={macAddress}>{macAddress}</Option>;
     }
   );
+
+  const handlePumpBtns = async (pumpNumber, pumpState, index) => {
+    if (pumpState === 1) {
+      pumpBtns[index].state = 0;
+    } else {
+      pumpBtns[index].state = 1;
+    }
+    const res = await publishToMqtt(
+      selectedMacaddress,
+      `${pumpNumber},${pumpBtns[index].state}`
+    );
+    if (res.status === 200) {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Pump",
+        titleText: `Pump ${pumpNumber} ${pumpState === 1 ? "Off" : "On"}`,
+        showConfirmButton: false,
+        timer: 2000,
+      });
+    } else {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Something went Wrong! Please check your internet connection",
+        // titleText: res?.data?.message,
+        showConfirmButton: false,
+        timer: 2000,
+      });
+    }
+  };
   return (
     <>
       <div>
@@ -181,6 +228,16 @@ const Client = () => {
               )}
             </table>
             {loading && <Skeleton paragraph={{ rows: 5 }} active />}
+
+            {pumpBtns.map((btn, index) => {
+              return (
+                <button
+                  className='creat_btn mt-5 mb-3 mr-4'
+                  onClick={() => handlePumpBtns(btn.value, btn.state, index)}>
+                  {btn.name}
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>

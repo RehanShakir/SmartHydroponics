@@ -28,16 +28,24 @@ exports.postMqttData = () => {
  */
 exports.publishToMqtt = async (req, res) => {
   try {
-    client.publish(
-      `${req.params.macAdress}/dosingControl`,
-      req?.body?.message,
-      { qos: 0, retain: false },
-      (error) => {
-        if (error) {
-          console.error(error);
-        }
+    console.log(req.params.macAddress);
+    const { message } = req?.body;
+    const macAddress = req.params.macAddress + "/dosingControl";
+    // client.publish(
+    //   `dosingControl`,
+    //   "message",
+    //   { qos: 0, retain: false },
+    //   (error) => {
+    //     if (error) {
+    //       console.error(error);
+    //     }
+    //   }
+    // );
+    client.publish(macAddress, message, { qos: 0, retain: false }, (error) => {
+      if (error) {
+        console.error(error);
       }
-    );
+    });
     return res.status(200).json({ message: "Data Published" });
   } catch (error) {
     return res.status(500).json({ message: error.message });

@@ -6,7 +6,7 @@ const { postMqttData, publishToMqtt, getDataByMacAddress } = controller;
 const router = Router();
 postMqttData();
 
-router.post("/publish/:macAdress", publishToMqtt);
+router.post("/publish/:macAddress", publishToMqtt);
 
 router.post("/getData", getDataByMacAddress);
 

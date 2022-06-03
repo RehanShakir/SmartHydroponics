@@ -79,3 +79,14 @@ export const getAllUsersMqttData = () =>
       "x-access-token": getToken(),
     },
   });
+
+export const publishToMqtt = (macAddress, message) =>
+  baseURL.post(
+    `/mqtt/publish/${macAddress}`,
+    { message },
+    {
+      headers: {
+        "x-access-token": getToken(),
+      },
+    }
+  );
